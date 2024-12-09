@@ -1,22 +1,30 @@
 import React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
+import { Link, Tabs, Redirect } from 'expo-router';
 import { Pressable } from 'react-native';
+import { SignInButton } from '@clerk/clerk-react'
+
 
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
 import { useClientOnlyValue } from '@/components/useClientOnlyValue';
+import { TabBarIcon } from '@/components/TabBarIcon';
+
+import { useAuth } from '@clerk/clerk-expo';
+
 
 // You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+
+  const { isSignedIn } = useAuth()
+  if(!isSignedIn) {
+    return (
+      <Redirect href={'/sign-in'} />
+    )
+  }
 
   return (
     <Tabs
@@ -27,7 +35,7 @@ export default function TabLayout() {
         headerShown: useClientOnlyValue(false, true),
       }}>
       <Tabs.Screen
-        name="index"
+        name="one"
         options={{
           title: 'Tab One',
           tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
