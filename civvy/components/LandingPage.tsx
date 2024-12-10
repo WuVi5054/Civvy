@@ -96,13 +96,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   loginButton: {
-    backgroundColor: '#fff',
+    backgroundColor: 'rgb(77, 78, 85)',
     paddingVertical: 8,
     paddingHorizontal: 15,
     borderRadius: 5,
   },
   loginText: {
-    color: '#000',
+    color: 'white',
     fontSize: 16,
   },
   heroSection: {

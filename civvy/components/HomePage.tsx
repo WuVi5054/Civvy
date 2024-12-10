@@ -13,7 +13,7 @@ const HomePage = ({ user }: Props) => {
       {/* Header Section */}
       <View style={styles.header}>
         <Text style={styles.logo}>Civvy</Text>
-          <SignOutButton />
+          <SignOutButton>Sign Out</SignOutButton>
       </View>
 
       {/* Hero Section */}

@@ -1,8 +1,11 @@
 import { useClerk } from '@clerk/clerk-react'
 import * as Linking from 'expo-linking'
-import { Button } from 'react-native'
+import Button from "./Button";
 
-export const SignOutButton = () => {
+type Props = {
+  children: React.ReactNode;
+};
+export const SignOutButton = ({ children }: Props) => {
   const { signOut } = useClerk()
 
   const handleSignOut = async () => {
@@ -17,5 +20,5 @@ export const SignOutButton = () => {
     }
   }
 
-  return <Button title="Sign out" onPress={handleSignOut} />
+  return <Button onPress={handleSignOut}>{children}</Button>
 }

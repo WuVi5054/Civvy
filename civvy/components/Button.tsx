@@ -30,9 +30,9 @@ const styles = StyleSheet.create({
   button: {
     borderRadius: 6,
     padding: 8,
-    backgroundColor: "rgb(47, 48, 55)",
+    backgroundColor: "rgb(77, 78, 85)",
     borderColor: "rgb(47, 48, 55)",
-    borderWidth: 1,
+    borderWidth: 4,
     fontSize: 14,
     fontWeight: "bold",
     display: "flex",
