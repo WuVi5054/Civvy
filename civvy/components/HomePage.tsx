@@ -60,6 +60,9 @@ const HomePage = ({ user }: Props) => {
             <Text style={{ color: "white" }}>
               Random Number: {userData.randomNumber}
             </Text>
+            <Text style={{ color: "white" }}>
+              Exp: {userData.exp}
+            </Text>
           </View>
         ) : (
           <Text style={{ color: "white" }}>No user data found.</Text>

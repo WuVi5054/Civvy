@@ -4,10 +4,8 @@ import { SignOutButton } from '@/components/SignOutButton'
 import * as Linking from 'expo-linking';
 import Button from './Button';
 
-interface Props {
-  user: any; 
-}
-const LandingPage = ({ user }: Props) => {
+
+const LandingPage = () => {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Header Section */}

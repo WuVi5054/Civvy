@@ -16,15 +16,12 @@ export const saveUserData = mutation({
     const data = {
       timestamp: new Date().toISOString(),
       randomNumber: Math.floor(Math.random() * 1000),
+      exp: 0,
     };
 
-    if (existingUser) {
-      // Update the existing user with new dummy data
-      await db.patch(existingUser._id, { data });
-      return { message: "User updated", data };
-    } else {
+    if (!existingUser) {
       // Insert a new user with the dummy data
-      await db.insert("users", { userId, data });
+      await db.insert("users", { userId, ...data });
       return { message: "User created", data };
     }
   },
@@ -41,6 +38,27 @@ export const getUserData = query({
       .filter((q) => q.eq(q.field("userId"), userId))
       .first();
 
-    return user ? user.data : null;
+    return user ? user : null;
+  },
+});
+
+export const updateUserExp = mutation({
+  args: {
+    userId: v.string(),
+    exp: v.number(),
+  },
+  handler: async ({ db }, { userId, exp }) => {
+    const existingUser = await db
+      .query("users")
+      .filter((q) => q.eq(q.field("userId"), userId))
+      .first();
+
+    if (existingUser) {
+      const newExp = existingUser.exp + exp;
+      await db.patch(existingUser._id, { exp: newExp });
+      return { message: "User exp updated", exp };
+    } else {
+      return { message: "User not found" };
+    }
   },
 });

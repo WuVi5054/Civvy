@@ -4,15 +4,16 @@ import { useLocalSearchParams, useNavigation } from 'expo-router';
 // import { articles } from '@/constants/mockData';
 import { Quiz } from '@/constants/Types';
 import { useLayoutEffect } from 'react';
-import { useQuery } from "convex/react";
+import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useUser } from '@clerk/clerk-expo'
 
 const ArticleScreen = () => {
   const { id } = useLocalSearchParams();
   const navigation = useNavigation();
   const getMaterial = useQuery(api.materials.getMaterialData, { materialId: id as string });
   const article = getMaterial;
-  
+
   useLayoutEffect(() => {
     if (article) {
       navigation.setOptions({
@@ -42,13 +43,19 @@ const ArticleScreen = () => {
 const QuizComponent: React.FC<{ quiz: Quiz }> = ({ quiz }) => {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [showResult, setShowResult] = useState(false);
+  const updateUserExp = useMutation(api.users.updateUserExp)
+  const { user }= useUser();
 
   const handleAnswer = (index: number) => {
     setSelectedAnswer(index);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async() => {
     setShowResult(true);
+
+    if (selectedAnswer === quiz.correctAnswer && user?.id) {
+      await updateUserExp({ userId: user.id, exp: 100 });
+    }
   };
 
   return (

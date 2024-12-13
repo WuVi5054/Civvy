@@ -26,7 +26,7 @@ export default function IndexPage() {
 
 
       <SignedOut>
-        <LandingPage user={user}/>
+        <LandingPage/>
       </SignedOut>
     </View>
   )
