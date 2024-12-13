@@ -15,7 +15,7 @@ export default function TabOneScreen() {
       <Button onPress={() => Linking.openURL(Linking.createURL('/'))}>
         <Text>Home</Text>
       </Button>
-      <SignOutButton />
+      <SignOutButton>Sign Out</SignOutButton>
     </View>
   );
 }

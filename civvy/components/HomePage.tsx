@@ -3,11 +3,34 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Platform }
 import { SignOutButton } from '@/components/SignOutButton'
 import * as Linking from 'expo-linking';
 import Button from './Button';
+import { api } from "@/convex/_generated/api";
+import { useQuery, useMutation } from "convex/react";
+import { useEffect } from 'react';
+
 
 interface Props {
   user: any; 
 }
 const HomePage = ({ user }: Props) => {
+  const tasks = useQuery(api.tasks.get);
+  const saveUser = useMutation(api.users.saveUserData)
+  const getUser = useQuery(api.users.getUserData, { userId: user?.id })
+
+  const handleSaveUser = async () => {
+    try {
+      const result = await saveUser({ userId: user?.id });
+      console.log("Save User Response:", result);
+    } catch (error) {
+      console.error("Error saving user:", error);
+    }
+  };
+
+  useEffect(() => {
+    handleSaveUser();
+  }, []);
+
+  const userData = getUser;
+
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {/* Header Section */}
@@ -22,9 +45,35 @@ const HomePage = ({ user }: Props) => {
           Hi
             Hello {user?.emailAddresses[0].emailAddress}
           </Text>
+          {tasks?.map(({ _id, text }) => <Text style={[styles.logo, { color: "white" }]} key={_id}>{text}</Text>)}
           <Button style={styles.navigationButton} onPress={() => Linking.openURL(Linking.createURL('/two'))}>
             <Text>Two</Text>
           </Button>
+
+        {/* User Data Section */}
+        {userData ? (
+          <View>
+            <Text style={{ color: "white" }}>User Data:</Text>
+            <Text style={{ color: "white" }}>
+              Timestamp: {userData.timestamp}
+            </Text>
+            <Text style={{ color: "white" }}>
+              Random Number: {userData.randomNumber}
+            </Text>
+          </View>
+        ) : (
+          <Text style={{ color: "white" }}>No user data found.</Text>
+        )}
+
+        {/* Button to save user data */}
+        <Button
+          style={styles.navigationButton}
+          onPress={handleSaveUser}
+        >
+          <Text>Save User Data</Text>
+        </Button>
+
+
         <Text style={styles.heroTitle}>Master Government Knowledge</Text>
         <Text style={styles.heroSubtitle}>Learn, engage, and stay informed about the Government and your Civic Duties.</Text>
         <TouchableOpacity style={styles.ctaButton}>

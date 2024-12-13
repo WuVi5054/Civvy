@@ -5,8 +5,6 @@ import { Text, Platform, StyleSheet, TouchableOpacity, ScrollView, SafeAreaView 
 import { Link, useRouter } from 'expo-router'
 import * as Linking from 'expo-linking';
 import { StatusBar } from 'expo-status-bar';
-import { api } from "@/convex/_generated/api";
-import { useQuery } from "convex/react";
 
 import { View } from '@/components/Themed'
 import Button from '@/components/Button';
@@ -19,13 +17,11 @@ const isWeb = Platform.OS === 'web';
 
 export default function IndexPage() {
   const { user } = useUser()
-  const tasks = useQuery(api.tasks.get);
 
   return (
     <View style={styles.container}>
       <SignedIn>
         <HomePage user={user} />
-        {tasks?.map(({ _id, text }) => <Text style={[styles.greeting, { color: "white" }]} key={_id}>{text}</Text>)}
       </SignedIn>
 
 
