@@ -12,7 +12,6 @@ import { useColorScheme } from '@/components/useColorScheme';
 import { ConvexProvider, ConvexReactClient } from "convex/react";
 import { ConvexProviderWithClerk } from 'convex/react-clerk';
 
-
 const tokenCache = {
   async getToken(key: string) {
     try {
