@@ -35,47 +35,66 @@ const ArticleScreen = () => {
     <ScrollView style={styles.container}>
       <Text style={styles.title}>{article.title}</Text>
       <Text style={styles.content}>{article.content}</Text>
-      <QuizComponent quiz={article.quiz} />
+      <QuizComponent id={id as string} quiz={article.quiz} />
     </ScrollView>
   );
 };
 
-const QuizComponent: React.FC<{ quiz: Quiz }> = ({ quiz }) => {
-  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+const QuizComponent: React.FC<{ id: string, quiz: Quiz[] }> = ({ id, quiz }) => {
+  const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
   const [showResult, setShowResult] = useState(false);
+  const [score, setScore] = useState(0);
   const updateUserExp = useMutation(api.users.updateUserExp)
   const { user }= useUser();
+  const markMaterialCompleted = useMutation(api.users.updateMaterialComplete);
+  const [isCompleted, setIsCompleted] = useState(false);
 
-  const handleAnswer = (index: number) => {
-    setSelectedAnswer(index);
+  const handleAnswer = (questionIndex: number, answerIndex: number) => {
+    setSelectedAnswers((prevAnswers) => {
+      const newAnswers = [...prevAnswers];
+      newAnswers[questionIndex] = answerIndex;
+      return newAnswers;
+    });
   };
 
-  const handleSubmit = async() => {
+  const handleSubmit = async () => {
     setShowResult(true);
+    const correctAnswers = quiz.filter((question, index) => selectedAnswers[index] === question.correctAnswer);
+    const exp = Math.floor((correctAnswers.length / quiz.length) * 100);
+    setScore(exp);
 
-    if (selectedAnswer === quiz.correctAnswer && user?.id) {
-      await updateUserExp({ userId: user.id, exp: 100 });
+    if (exp > 0 && user?.id) {
+      await updateUserExp({ userId: user.id, exp: exp });
+    }
+  };
+
+  const handleMarkCompleted = async () => {
+    if (user?.id) {
+      await markMaterialCompleted({ userId: user.id, materialId: id }); // assume quiz[0].id is the material ID
+      setIsCompleted(true);
     }
   };
 
   return (
     <View style={styles.quizContainer}>
-      <Text style={styles.quizTitle}>Quiz</Text>
-      <Text style={styles.quizQuestion}>{quiz.question}</Text>
-      {quiz.options.map((option, index) => (
-        <TouchableOpacity
-          key={index}
-          style={[
-            styles.quizOption,
-            selectedAnswer === index && styles.selectedOption,
-            showResult && index === quiz.correctAnswer && styles.correctOption,
-            showResult && selectedAnswer === index && selectedAnswer !== quiz.correctAnswer && styles.incorrectOption,
-          ]}
-          onPress={() => handleAnswer(index)}
-          disabled={showResult}
-        >
-          <Text>{option}</Text>
-        </TouchableOpacity>
+      {quiz.map((question, index) => (
+        <View key={index} style={styles.quizContainer}>
+          <Text style={styles.quizQuestion}>{question.question}</Text>
+          {question.options.map((option, answerIndex) => (
+            <TouchableOpacity
+            key={answerIndex}
+            style={[
+              styles.quizOption,
+              selectedAnswers[index] === answerIndex && styles.selectedOption,
+              showResult && answerIndex === question.correctAnswer && styles.correctOption,
+              showResult && selectedAnswers[index] === answerIndex && selectedAnswers[index] !== question.correctAnswer && styles.incorrectOption,
+            ]}
+              onPress={() => handleAnswer(index, answerIndex)}
+            >
+              <Text>{option}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
       ))}
       {!showResult && (
         <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
@@ -83,9 +102,26 @@ const QuizComponent: React.FC<{ quiz: Quiz }> = ({ quiz }) => {
         </TouchableOpacity>
       )}
       {showResult && (
-        <Text style={styles.resultText}>
-          {selectedAnswer === quiz.correctAnswer ? 'Correct!' : 'Incorrect. Try again!'}
-        </Text>
+        <View>
+          <Text style={styles.resultText}>You scored {score}%</Text>
+          {quiz.map((question, index) => (
+            <View key={index} style={styles.quizContainer}>
+              <Text style={styles.quizQuestion}>{question.question}</Text>
+              <Text style={styles.resultText}>
+                Your answer: {question.options[selectedAnswers[index]]}
+                {selectedAnswers[index] === question.correctAnswer ? ' (Correct)' : ' (Incorrect)'}
+              </Text>
+            </View>
+          ))}
+        </View>
+      )}
+      {showResult && !isCompleted && (
+        <TouchableOpacity style={styles.submitButton} onPress={handleMarkCompleted}>
+          <Text style={styles.submitButtonText}>Mark as Completed</Text>
+        </TouchableOpacity>
+      )}
+      {isCompleted && (
+        <Text style={styles.title}>Material marked as completed!</Text>
       )}
     </View>
   );

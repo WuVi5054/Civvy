@@ -17,6 +17,7 @@ export const saveUserData = mutation({
       timestamp: new Date().toISOString(),
       randomNumber: Math.floor(Math.random() * 1000),
       exp: 0,
+      material_completed: [],
     };
 
     if (!existingUser) {
@@ -57,6 +58,28 @@ export const updateUserExp = mutation({
       const newExp = existingUser.exp + exp;
       await db.patch(existingUser._id, { exp: newExp });
       return { message: "User exp updated", exp };
+    } else {
+      return { message: "User not found" };
+    }
+  },
+});
+
+
+export const updateMaterialComplete = mutation({
+  args: {
+    userId: v.string(),
+    materialId: v.string(),
+  },
+  handler: async ({ db }, { userId, materialId }) => {
+    const existingUser = await db
+      .query("users")
+      .filter((q) => q.eq(q.field("userId"), userId))
+      .first();
+
+    if (existingUser) {
+      const newMaterial = [...existingUser.material_completed, materialId];
+      await db.patch(existingUser._id, { material_completed: newMaterial });
+      return { message: "User material updated", newMaterial };
     } else {
       return { message: "User not found" };
     }

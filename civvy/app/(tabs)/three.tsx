@@ -6,20 +6,31 @@ import { Module } from '@/constants/Types';
 import { useRouter } from 'expo-router';
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
-
+import { useUser } from '@clerk/clerk-expo'
 const MainScreen = () => {
   const router = useRouter();
   const modules = useQuery(api.modules.get);
-
-  const renderModule = ({ item }: { item: Module }) => (
-    <TouchableOpacity
-      style={styles.moduleItem}
-      onPress={() => router.push(`/article/${item.id}`)}
-    >
-      <Text style={styles.moduleTitle}>{item.title}</Text>
-      <Text style={styles.moduleTopic}>{item.topic}</Text>
-    </TouchableOpacity>
-  );
+  const { user } = useUser();
+  const getUser = useQuery(api.users.getUserData, { userId: user?.id as string });
+  const userData = getUser;
+  const renderModule = ({ item }: { item: Module }) => {
+    const isCompleted = userData?.material_completed?.includes(item.id);
+  
+    return (
+      <TouchableOpacity
+        style={[
+          styles.moduleItem,
+          isCompleted && styles.completedModule, // Apply completed style if the module is completed
+        ]}
+        onPress={() => router.push(`/article/${item.id}`)}
+      >
+        <Text style={styles.moduleTitle}>{item.title}</Text>
+        <Text style={styles.moduleTopic}>{item.topic}</Text>
+        {isCompleted && <Text style={styles.completedText}>Completed</Text>} {/* Optional visual indicator */}
+      </TouchableOpacity>
+    );
+  };
+  
 
   const renderSection = ({ item }: { item: string }) => (
     <View style={styles.section}>
@@ -41,6 +52,7 @@ const MainScreen = () => {
       renderItem={renderSection}
       keyExtractor={(item) => item}
     />
+    
   );
 };
 
@@ -73,6 +85,15 @@ const styles = StyleSheet.create({
   moduleTopic: {
     fontSize: 14,
     color: '#666',
+  },
+  completedModule: {
+    borderColor: "#00FF00", // green
+    borderWidth: 2,
+  },
+  completedText: {
+    fontSize: 12,
+    color: '#00FF00',
+    marginTop: 8,
   },
 });
 
