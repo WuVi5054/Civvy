@@ -26,10 +26,11 @@ const MainScreen = () => {
       >
         <Text style={styles.moduleTitle}>{item.title}</Text>
         <Text style={styles.moduleTopic}>{item.topic}</Text>
-        {isCompleted && <Text style={styles.completedText}>Completed</Text>} {/* Optional visual indicator */}
+        {isCompleted && <Text style={styles.completedText}>Completed</Text>}
       </TouchableOpacity>
     );
   };
+  
   
 
   const renderSection = ({ item }: { item: string }) => (
