@@ -1,12 +1,15 @@
 import React from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import { Link } from 'expo-router';
 import { useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useRouter } from 'expo-router';
+import { useUser } from '@clerk/clerk-expo'
+
 export default function EventsScreen() {
   const router = useRouter();
-  const events = useQuery(api.events.getEvents);
+  const { user }= useUser();
+  const allEvents = useQuery(api.events.getEvents);
+  const events = allEvents?.filter(event => event.guests.includes(user?.id as string));
   return (
     <View style={styles.container}>
       <FlatList

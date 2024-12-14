@@ -66,6 +66,9 @@ const HomePage = ({ user }: Props) => {
             <Text style={{ color: "white" }}>
               Material: {userData.material_completed}
             </Text>
+            <Text style={{ color: "white" }}>
+              Events: {userData.events}
+            </Text>
           </View>
         ) : (
           <Text style={{ color: "white" }}>No user data found.</Text>

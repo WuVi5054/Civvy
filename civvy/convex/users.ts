@@ -1,3 +1,4 @@
+import { events } from "@/constants/mockData";
 import { mutation, query } from "./_generated/server";
 import { v } from "convex/values";
 
@@ -18,6 +19,7 @@ export const saveUserData = mutation({
       randomNumber: Math.floor(Math.random() * 1000),
       exp: 0,
       material_completed: [],
+      events: [],
     };
 
     if (!existingUser) {
