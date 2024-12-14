@@ -35,9 +35,6 @@ export default function EventsScreen() {
           </TouchableOpacity>
         )}
       />
-        <TouchableOpacity style={styles.createButton} onPress={() => router.push(`/events/create`)}>
-          <Text style={styles.createButtonText}>Create Event</Text>
-        </TouchableOpacity>
 
     </View>
   );

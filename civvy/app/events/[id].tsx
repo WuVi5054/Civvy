@@ -25,6 +25,7 @@ export default function EventDetailScreen() {
 
     if (!hasJoined) {
       await joinEvent({ eventId: id as string, userId: user?.id as string });
+      setHasJoined(true);
     }
 
   };
