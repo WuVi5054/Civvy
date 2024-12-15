@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, TouchableOpacity, ScrollView, Platform }
 import { SignOutButton } from '@/components/SignOutButton'
 import * as Linking from 'expo-linking';
 import Button from './Button';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 
 const LandingPage = () => {
@@ -18,59 +19,57 @@ const LandingPage = () => {
 
       {/* Hero Section */}
       <View style={styles.heroSection}>
-        <Text style={styles.heroTitle}>Master Government Knowledge</Text>
-        <Text style={styles.heroSubtitle}>Learn, engage, and stay informed about the Government and your Civic Duties.</Text>
+        <Text style={styles.heroTitle}>
+          Master Government Knowledge {'\n'} 
+          & Join the Civic Revolution
+          </Text>
+        <Text style={styles.heroSubtitle}>
+          Learn, engage, and stay informed {'\n'}
+          on about the Government and your Civic Duties.
+          </Text>
         <TouchableOpacity style={styles.ctaButton} onPress={() => Linking.openURL(Linking.createURL('/sign-up'))}>
           <Text style={styles.ctaText}>Get Started</Text>
         </TouchableOpacity>
       </View>
 
+      {/* Form separator */}
+      <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{flex: 1, height: 4, backgroundColor: '#eee'}} />
+          <View>
+            <Text style={{width: 50, textAlign: 'center', color: "#555"}}>-</Text>
+          </View>
+          <View style={{flex: 1, height: 4, backgroundColor: '#eee'}} />
+        </View>
+
       {/* Features Section */}
       <View style={styles.featuresSection}>
         <Text style={styles.sectionTitle}>Features</Text>
         <View style={styles.featureItem}>
-          <Image source={{ uri: 'https://via.placeholder.com/80' }} style={styles.featureIcon} />
-          <Text style={styles.featureText}>Interactive Lessons</Text>
+          <FontAwesome name="book" size={60} color={"#fff"} style={{ marginRight: 15 }}/>
+          <Text style={styles.featureText}>
+            Learn about your Civic Duties {'\n'}
+            and the Government 
+            {'\n'}through Interactive Lessons
+            </Text>
+        </View>
+        {/* Form separator */}
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+          <View style={{flex: 1, height: 4, backgroundColor: '#eee'}} />
+          <View>
+            <Text style={{width: 50, textAlign: 'center', color: "#555"}}>-</Text>
+          </View>
+          <View style={{flex: 1, height: 4, backgroundColor: '#eee'}} />
         </View>
         <View style={styles.featureItem}>
-          <Image source={{ uri: 'https://via.placeholder.com/80' }} style={styles.featureIcon} />
-          <Text style={styles.featureText}>Gamified Progress</Text>
-        </View>
-        <View style={styles.featureItem}>
-          <Image source={{ uri: 'https://via.placeholder.com/80' }} style={styles.featureIcon} />
-          <Text style={styles.featureText}>Live Events</Text>
+          <FontAwesome name="plane" size={60} color={"#fff"} style={{ marginRight: 15 }}/>
+          <Text style={styles.featureText}>
+            Tap into a Network of {'\n'}
+            Civic Leaders to Connect and{'\n'}
+             Get Involved in Live Events
+             </Text>
         </View>
       </View>
 
-      {/* Events Section */}
-      <View style={styles.eventsSection}>
-        <Text style={styles.sectionTitle}>Upcoming Events</Text>
-        <View style={styles.eventCard}>
-          <Text style={styles.eventTitle}>Town Hall Q&A</Text>
-          <Text style={styles.eventDate}>March 25, 2024</Text>
-        </View>
-        <View style={styles.eventCard}>
-          <Text style={styles.eventTitle}>Legislation Workshop</Text>
-          <Text style={styles.eventDate}>April 5, 2024</Text>
-        </View>
-      </View>
-
-      {/* Footer Section */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>Copyright © 2024 GovLearn. All rights reserved.</Text>
-        <View style={styles.footerLinks}>
-          <TouchableOpacity>
-            <Text style={styles.footerLink}>
-              Privacy Policy
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={styles.footerLink}>
-              Terms of Service
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
     </ScrollView>
   );
 };
@@ -138,7 +137,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   sectionTitle: {
-    fontSize: 22,
+    fontSize: 36,
     fontWeight: 'bold',
     marginBottom: 15,
     color: '#fff',
@@ -154,7 +153,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   featureText: {
-    fontSize: 16,
+    fontSize: 24,
     color: '#fff',
   },
   eventsSection: {

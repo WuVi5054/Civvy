@@ -39,103 +39,52 @@ const HomePage = ({ user }: Props) => {
           <SignOutButton>Sign Out</SignOutButton>
       </View>
 
+        
+      <Text style={styles.heroTitle}>Master Government Knowledge</Text>
+      <Text style={styles.heroSubtitle}>
+        Learn, engage, and stay informed {'\n'}
+        about the Government and your Civic Duties.
+        </Text>
       {/* Hero Section */}
       <View style={styles.heroSection}>
         <Text style={styles.logo}>
-          Hi
-            Hello {user?.emailAddresses[0].emailAddress}
+          Hello Citizen
           </Text>
-          {tasks?.map(({ _id, text }) => <Text style={[styles.logo, { color: "white" }]} key={_id}>{text}</Text>)}
-          <Button style={styles.navigationButton} onPress={() => Linking.openURL(Linking.createURL('/two'))}>
-            <Text>Two</Text>
-          </Button>
 
         {/* User Data Section */}
         {userData ? (
           <View>
-            <Text style={{ color: "white" }}>User Data:</Text>
-            <Text style={{ color: "white" }}>
-              Timestamp: {userData.timestamp}
+            <Text style={{ fontSize: 32, color: "white" }}>
+              Learning Points: {userData.exp}
             </Text>
-            <Text style={{ color: "white" }}>
-              Random Number: {userData.randomNumber}
-            </Text>
-            <Text style={{ color: "white" }}>
-              Exp: {userData.exp}
-            </Text>
-            <Text style={{ color: "white" }}>
-              Material: {userData.material_completed}
-            </Text>
-            <Text style={{ color: "white" }}>
-              Events: {userData.events}
-            </Text>
+           
           </View>
         ) : (
           <Text style={{ color: "white" }}>No user data found.</Text>
         )}
 
-        {/* Button to save user data */}
-        <Button
-          style={styles.navigationButton}
-          onPress={handleSaveUser}
-        >
-          <Text>Save User Data</Text>
-        </Button>
-
-
-        <Text style={styles.heroTitle}>Master Government Knowledge</Text>
-        <Text style={styles.heroSubtitle}>Learn, engage, and stay informed about the Government and your Civic Duties.</Text>
-        <TouchableOpacity style={styles.ctaButton}>
-          <Text style={styles.ctaText}>Get Started</Text>
-        </TouchableOpacity>
       </View>
 
       {/* Features Section */}
       <View style={styles.featuresSection}>
-        <Text style={styles.sectionTitle}>Features</Text>
+        <Text style={styles.sectionTitle}>Navigation</Text>
         <View style={styles.featureItem}>
-          <Image source={{ uri: 'https://via.placeholder.com/80' }} style={styles.featureIcon} />
-          <Text style={styles.featureText}>Interactive Lessons</Text>
+          <Button style={styles.navigationButton} onPress={() => Linking.openURL(Linking.createURL('/learning'))}>
+            <Text style={styles.navigationButtonText}>Lessons</Text>
+          </Button>
         </View>
         <View style={styles.featureItem}>
-          <Image source={{ uri: 'https://via.placeholder.com/80' }} style={styles.featureIcon} />
-          <Text style={styles.featureText}>Gamified Progress</Text>
+          <Button style={styles.navigationButton} onPress={() => Linking.openURL(Linking.createURL('/events'))}>
+            <Text style={styles.navigationButtonText}>Events</Text>
+          </Button>
         </View>
         <View style={styles.featureItem}>
-          <Image source={{ uri: 'https://via.placeholder.com/80' }} style={styles.featureIcon} />
-          <Text style={styles.featureText}>Live Events</Text>
+          <Button style={styles.navigationButton} onPress={() => Linking.openURL(Linking.createURL('/joined-events'))}>
+            <Text style={styles.navigationButtonText}>Joined Events</Text>
+          </Button>
         </View>
       </View>
 
-      {/* Events Section */}
-      <View style={styles.eventsSection}>
-        <Text style={styles.sectionTitle}>Upcoming Events</Text>
-        <View style={styles.eventCard}>
-          <Text style={styles.eventTitle}>Town Hall Q&A</Text>
-          <Text style={styles.eventDate}>March 25, 2024</Text>
-        </View>
-        <View style={styles.eventCard}>
-          <Text style={styles.eventTitle}>Legislation Workshop</Text>
-          <Text style={styles.eventDate}>April 5, 2024</Text>
-        </View>
-      </View>
-
-      {/* Footer Section */}
-      <View style={styles.footer}>
-        <Text style={styles.footerText}>Copyright © 2024 GovLearn. All rights reserved.</Text>
-        <View style={styles.footerLinks}>
-          <TouchableOpacity>
-            <Text style={styles.footerLink}>
-              Privacy Policy
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Text style={styles.footerLink}>
-              Terms of Service
-            </Text>
-          </TouchableOpacity>
-        </View>
-      </View>
     </ScrollView>
   );
 };
@@ -266,9 +215,13 @@ const styles = StyleSheet.create({
   },
   navigationButton: {
     backgroundColor: '#007bff',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 20,
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 25,
+  },
+  navigationButtonText: { 
+    color: 'white',
+    fontSize: 28,
   },
 });
 

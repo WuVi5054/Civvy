@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, useNavigation } from 'expo-router';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { useLayoutEffect } from 'react';
+
 export default function EditEventScreen() {
     const { id } = useLocalSearchParams();
     const router = useRouter();
@@ -14,16 +16,27 @@ export default function EditEventScreen() {
     const curEvent = useQuery(api.events.getSpecificEvents, { eventId: id as string });
     const updateEvent = useMutation(api.events.editEvent); 
     
-  useEffect(() => {
-    const event = curEvent
-    if (event) {
-      setTitle(event.title);
-      setDate(new Date(event.date).toISOString().split('T')[0]);
-      setDescription(event.description);
-      setLocation(event.location);
-      setTime(event.time);
-    }
-  }, [id]);
+    const navigation = useNavigation();
+
+    useLayoutEffect(() => {
+      if (curEvent) {
+        navigation.setOptions({
+          title: "Editing",
+          headerBackTitle: curEvent.title,
+        });
+      }
+    }, [navigation, curEvent]);
+
+    useEffect(() => {
+      const event = curEvent
+      if (event) {
+        setTitle(event.title);
+        setDate(new Date(event.date).toISOString().split('T')[0]);
+        setDescription(event.description);
+        setLocation(event.location);
+        setTime(event.time);
+      }
+    }, [id]);
 
   const handleSave = async () => {
     // Implement save logic here
@@ -56,13 +69,12 @@ export default function EditEventScreen() {
         onChangeText={setDate}
         placeholder={date ? new Date(curEvent.date).toISOString().split('T')[0] : "YYYY-MM-DD"}
       />
-      <Text style={styles.label}>Description</Text>
+      <Text style={styles.label}>Time</Text>
       <TextInput
-        style={[styles.input, styles.textArea]}
-        value={description}
-        onChangeText={setDescription}
-        placeholder={description || "Event Description"}
-        multiline
+        style={styles.input}
+        value={time}
+        onChangeText={setTime}
+        placeholder={time || "Time"}
       />
       <Text style={styles.label}>Location</Text>
       <TextInput
@@ -71,12 +83,13 @@ export default function EditEventScreen() {
         onChangeText={setLocation}
         placeholder={location || "Location"}
       />
-      <Text style={styles.label}>Time</Text>
+      <Text style={styles.label}>Description</Text>
       <TextInput
-        style={styles.input}
-        value={time}
-        onChangeText={setTime}
-        placeholder={time || "Time"}
+        style={[styles.input, styles.textArea]}
+        value={description}
+        onChangeText={setDescription}
+        placeholder={description || "Event Description"}
+        multiline
       />
       <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
         <Text style={styles.buttonText}>Save Changes</Text>
@@ -111,7 +124,7 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   saveButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: 'gray',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',

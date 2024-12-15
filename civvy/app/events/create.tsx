@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useNavigation } from 'expo-router';
 import { useUser } from '@clerk/clerk-expo'
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import uuid from 'react-native-uuid';
+import { useLayoutEffect } from 'react';
 
 export default function CreateEventScreen() {
     const { user }= useUser();
@@ -15,6 +16,15 @@ export default function CreateEventScreen() {
     const [time, setTime] = useState('');
     const router = useRouter();
     const createEvent = useMutation(api.events.createEvent);
+    const navigation = useNavigation();
+
+    useLayoutEffect(() => {
+      navigation.setOptions({
+        title: "Create Event",
+        headerBackTitle: 'Events',
+      });
+      
+    }, [navigation]);
 
   const handleCreate = async() => {
     // Implement create logic here
@@ -102,7 +112,7 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
   createButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: 'gray',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',

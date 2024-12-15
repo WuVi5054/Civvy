@@ -63,7 +63,7 @@ export default function SignInScreen() {
         {/* Header text */}
         <View style={{ marginVertical: 16, alignItems: "center" }}>
           <Text style={{ fontSize: 24, fontWeight: "bold" }}>
-            Sign into Daily Reps
+            Sign into Civvy
           </Text>
           <Text>
             Welcome back! Please sign in to continue

@@ -30,7 +30,7 @@ export default function AuthRoutesLayout() {
         options={{
           title: 'Sign in',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'person' : 'person-outline'} color={color} />
+            <TabBarIcon name={'sign-in'} color={color} />
           ),
         }}
       />
@@ -39,7 +39,7 @@ export default function AuthRoutesLayout() {
         options={{
           title: 'Sign up',
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'person-add' : 'person-add-outline'} color={color} />
+            <TabBarIcon name={'sign-out'} color={color} />
           ),
         }}
       />

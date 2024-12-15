@@ -10,14 +10,15 @@ import { useUser } from '@clerk/clerk-expo'
 
 const ArticleScreen = () => {
   const { id } = useLocalSearchParams();
-  const navigation = useNavigation();
   const getMaterial = useQuery(api.materials.getMaterialData, { materialId: id as string });
   const article = getMaterial;
+  const navigation = useNavigation();
 
   useLayoutEffect(() => {
     if (article) {
       navigation.setOptions({
         title: article.title,
+        headerBackTitle: 'Learning',
       });
     }
   }, [navigation, article]);
@@ -104,15 +105,7 @@ const QuizComponent: React.FC<{ id: string, quiz: Quiz[] }> = ({ id, quiz }) => 
       {showResult && (
         <View>
           <Text style={styles.resultText}>You scored {score}%</Text>
-          {quiz.map((question, index) => (
-            <View key={index} style={styles.quizContainer}>
-              <Text style={styles.quizQuestion}>{question.question}</Text>
-              <Text style={styles.resultText}>
-                Your answer: {question.options[selectedAnswers[index]]}
-                {selectedAnswers[index] === question.correctAnswer ? ' (Correct)' : ' (Incorrect)'}
-              </Text>
-            </View>
-          ))}
+          <Text style={[styles.resultText, {color: 'green'}]}>{score} Learning Points Gained!</Text>
         </View>
       )}
       {showResult && !isCompleted && (
@@ -121,7 +114,7 @@ const QuizComponent: React.FC<{ id: string, quiz: Quiz[] }> = ({ id, quiz }) => 
         </TouchableOpacity>
       )}
       {isCompleted && (
-        <Text style={styles.title}>Material marked as completed!</Text>
+        <Text style={[styles.title, {color: 'green'}]}> Completed!</Text>
       )}
     </View>
   );
@@ -137,6 +130,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 16,
+    alignSelf: 'center',
   },
   content: {
     fontSize: 16,
@@ -174,7 +168,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffa3a3',
   },
   submitButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: 'black',
     borderRadius: 8,
     padding: 12,
     alignItems: 'center',

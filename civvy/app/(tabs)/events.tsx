@@ -17,15 +17,19 @@ export default function EventsScreen() {
             <View>
               <Text style={styles.eventTitle}>{item.title}</Text>
               <Text>
-                {item.userId} - {item.location} - {item.time}
+                Date: {item.date ? new Date(item.date).toLocaleDateString() : 'Date not available'}
               </Text>
               <Text>
-                {item.date ? new Date(item.date).toLocaleDateString() : 'Date not available'}
+                Time: {item.time}
+              </Text>
+              <Text>
+                Location: {item.location}
               </Text>
               <Text>
                 {item.guests.length} guests
               </Text>
               <Text>
+                Description: {'\n' }
                 {item.description || 'Description not available'}
               </Text>
             </View>
@@ -60,7 +64,7 @@ const styles = StyleSheet.create({
     color: '#666',
   },
   createButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: 'gray',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',

@@ -1,23 +1,35 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter, useNavigation } from 'expo-router';
 import { useQuery, useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { useUser } from '@clerk/clerk-expo'
 import { useState } from 'react';
+import { useLayoutEffect } from 'react';
+
 export default function EventDetailScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const { user }= useUser();
   const [hasJoined, setHasJoined] = useState(false);
+  const navigation = useNavigation();
 
   const event = useQuery(api.events.getSpecificEvents, { eventId: id as string });
   const joinEvent = useMutation(api.events.joinEvent);
 
+  useLayoutEffect(() => {
+    if (event) {
+      navigation.setOptions({
+        title: event.title,
+        headerBackTitle: 'Events',
+      });
+    }
+  }, [navigation, event]);
 
   if (!event) {
     return <Text>Event not found</Text>;
   }
+
 
   const handleJoin = async () => {
     // Implement join logic here
@@ -37,8 +49,22 @@ export default function EventDetailScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{event.title}</Text>
-      <Text style={styles.date}>{new Date(event.date).toLocaleDateString()}</Text>
-      <Text style={styles.description}>{event.description}</Text>
+      <Text style={styles.date}>
+        Date: {new Date(event.date).toLocaleDateString()}
+        </Text>
+      <Text style={styles.date}>
+        Time: {event.time}
+      </Text>
+      <Text style={styles.text}>
+        Location: {event.location}
+      </Text>
+      <Text style={styles.text}>
+        {event.guests.length} guests
+      </Text>
+      <Text style={styles.description}>
+        Description: {'\n'}
+        {event.description}
+        </Text>
       <TouchableOpacity
         style={styles.joinButton}
         onPress={handleJoin}
@@ -50,7 +76,7 @@ export default function EventDetailScreen() {
       </TouchableOpacity>
       {event.createdBy === user?.id && (
         <TouchableOpacity style={styles.editButton} onPress={handleEdit}>
-          <Text style={styles.buttonText}>Edit Event</Text>
+          <Text style={[styles.buttonText, { color: 'black' }]}>Edit Event</Text>
         </TouchableOpacity>
       )}
     </View>
@@ -73,20 +99,25 @@ const styles = StyleSheet.create({
     color: 'white',
     marginBottom: 16,
   },
+  text: {
+    fontSize: 16,
+    color: 'white',
+    marginBottom: 16,
+  },
   description: {
     fontSize: 16,
     marginBottom: 24,
     color: 'white',
   },
   joinButton: {
-    backgroundColor: '#007AFF',
+    backgroundColor: 'gray',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 8,
   },
   editButton: {
-    backgroundColor: '#FF9500',
+    backgroundColor: 'darkgray',
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
