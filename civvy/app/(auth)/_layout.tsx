@@ -7,6 +7,7 @@ import React from 'react';
 import { TabBarIcon } from '@/components/TabBarIcon';
 import Colors  from '@/constants/Colors';
 import { useColorScheme } from '@/components/useColorScheme';
+import { useClientOnlyValue } from '@/components/useClientOnlyValue';
 
 export default function AuthRoutesLayout() {
   const colorScheme = useColorScheme();
@@ -20,16 +21,14 @@ export default function AuthRoutesLayout() {
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'dark'].tint,
-        headerShown: false
+        headerShown: useClientOnlyValue(false, true),
       }}
-      sceneContainerStyle={{
-        backgroundColor: "white"
-      }}>
+      >
       <Tabs.Screen
         name="sign-in"
         options={{
           title: 'Sign in',
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ color }) => (
             <TabBarIcon name={'sign-in'} color={color} />
           ),
         }}
@@ -38,7 +37,7 @@ export default function AuthRoutesLayout() {
         name="sign-up"
         options={{
           title: 'Sign up',
-          tabBarIcon: ({ color, focused }) => (
+          tabBarIcon: ({ color }) => (
             <TabBarIcon name={'sign-out'} color={color} />
           ),
         }}
